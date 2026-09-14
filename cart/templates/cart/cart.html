@@ -1,64 +1,220 @@
+```html
 {% extends "base.html" %}
+
+{% block title %}My Cart - ShopSphere{% endblock %}
 
 {% block content %}
 
-<div class="container mt-5">
+<div class="container py-5">
 
-    <h2 class="mb-4">🛒 My Cart</h2>
+    <h2 class="fw-bold mb-4">🛒 My Cart</h2>
 
     {% if cart.items.all %}
 
-        <div class="table-responsive">
-            <table class="table table-bordered align-middle">
+    <div class="row">
 
-                <thead class="table-dark">
-                    <tr>
-                        <th>Product</th>
-                        <th>Price</th>
-                        <th>Quantity</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
+        <!-- Cart Items -->
+        <div class="col-lg-8">
 
-                <tbody>
+            {% for item in cart.items.all %}
 
-                    {% for item in cart.items.all %}
+            <div class="card mb-3 shadow-sm">
 
-                    <tr>
+                <div class="card-body">
 
-                        <td>
-                            {{ item.product.name }}
-                        </td>
+                    <div class="row align-items-center">
 
-                        <td>
-                            ${{ item.product.price }}
-                        </td>
+                        <!-- Product Image -->
+                        <div class="col-md-2">
 
-                        <td>
-                            {{ item.quantity }}
-                        </td>
+                            {% if item.product.image %}
 
-                        <td>
-                            ${{ item.product.price|floatformat:2 }}
-                        </td>
+                                <img
+                                    src="{{ item.product.image.url }}"
+                                    class="img-fluid rounded"
+                                    style="height: 90px; width: 90px; object-fit: cover;"
+                                    alt="{{ item.product.name }}"
+                                >
 
-                    </tr>
+                            {% else %}
 
-                    {% endfor %}
+                                <div
+                                    class="bg-light rounded d-flex align-items-center justify-content-center"
+                                    style="height: 90px; width: 90px;"
+                                >
+                                    No Image
+                                </div>
 
-                </tbody>
+                            {% endif %}
 
-            </table>
+                        </div>
+
+
+                        <!-- Product Name & Price -->
+                        <div class="col-md-3">
+
+                            <h5 class="fw-bold mb-1">
+                                {{ item.product.name }}
+                            </h5>
+
+                            <p class="text-muted mb-0">
+                                ৳ {{ item.product.price|floatformat:2 }}
+                            </p>
+
+                        </div>
+
+
+                        <!-- Quantity -->
+                        <div class="col-md-3">
+
+                            <form
+                                method="POST"
+                                action="{% url 'update_cart' item.id %}"
+                                class="d-flex align-items-center gap-2"
+                            >
+
+                                {% csrf_token %}
+
+                                <input
+                                    type="number"
+                                    name="quantity"
+                                    value="{{ item.quantity }}"
+                                    min="1"
+                                    max="{{ item.product.stock }}"
+                                    class="form-control"
+                                    style="width: 80px;"
+                                >
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-outline-dark"
+                                >
+                                    Update
+                                </button>
+
+                            </form>
+
+                        </div>
+
+
+                        <!-- Item Total -->
+                        <div class="col-md-2">
+
+                            <strong>
+                                ৳ {{ item.get_total_price|floatformat:2 }}
+                            </strong>
+
+                        </div>
+
+
+                        <!-- Remove -->
+                        <div class="col-md-2 text-end">
+
+                            <a
+                                href="{% url 'remove_from_cart' item.id %}"
+                                class="btn btn-outline-danger btn-sm"
+                            >
+                                Remove
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
         </div>
+
+
+        <!-- Cart Summary -->
+        <div class="col-lg-4">
+
+            <div class="card shadow-sm">
+
+                <div class="card-body">
+
+                    <h4 class="fw-bold mb-4">
+                        Cart Summary
+                    </h4>
+
+
+                    <!-- Subtotal -->
+                    <div class="d-flex justify-content-between mb-3">
+
+                        <span>
+                            Subtotal
+                        </span>
+
+                        <strong>
+                            ৳ {{ total_price|floatformat:2 }}
+                        </strong>
+
+                    </div>
+
+
+                    <hr>
+
+
+                    <!-- Total -->
+                    <div class="d-flex justify-content-between mb-4">
+
+                        <h5 class="fw-bold">
+                            Total
+                        </h5>
+
+                        <h5 class="fw-bold text-success">
+                            ৳ {{ total_price|floatformat:2 }}
+                        </h5>
+
+                    </div>
+
+
+                    <!-- Checkout -->
+                    <button
+                        class="btn btn-success w-100 btn-lg"
+                    >
+                        Proceed to Checkout
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 
     {% else %}
 
-        <div class="alert alert-info">
-            Your cart is empty.
-        </div>
+    <!-- Empty Cart -->
+
+    <div class="text-center py-5">
+
+        <h4 class="mb-3">
+            Your cart is empty 🛒
+        </h4>
+
+        <p class="text-muted mb-4">
+            Add some products to your cart and they will appear here.
+        </p>
+
+        <a
+            href="{% url 'product_list' %}"
+            class="btn btn-dark"
+        >
+            Continue Shopping
+        </a>
+
+    </div>
 
     {% endif %}
 
 </div>
 
 {% endblock %}
+```
