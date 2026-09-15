@@ -1,4 +1,3 @@
-```html
 {% extends "base.html" %}
 
 {% block title %}My Cart - ShopSphere{% endblock %}
@@ -174,11 +173,12 @@
 
 
                     <!-- Checkout -->
-                    <button
+                    <a
+                        href="{% url 'checkout' %}"
                         class="btn btn-success w-100 btn-lg"
                     >
                         Proceed to Checkout
-                    </button>
+                    </a>
 
                 </div>
 
@@ -217,4 +217,3 @@
 </div>
 
 {% endblock %}
-```

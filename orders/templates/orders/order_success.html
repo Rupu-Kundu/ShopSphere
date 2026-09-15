@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Order Success - ShopSphere{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+```
+<div class="card shadow-sm mx-auto text-center" style="max-width: 650px;">
+
+    <div class="card-body p-5">
+
+        <div class="mb-4">
+
+            <h1 class="display-4">🎉</h1>
+
+            <h2 class="fw-bold text-success">
+                Order Placed Successfully!
+            </h2>
+
+        </div>
+
+        <p class="text-muted mb-4">
+            Thank you for shopping with ShopSphere.
+            Your order has been placed successfully.
+        </p>
+
+        <!-- Order Information -->
+        <div class="bg-light rounded p-4 mb-4 text-start">
+
+            <div class="d-flex justify-content-between mb-3">
+                <strong>Order ID:</strong>
+
+                <span>
+                    #{{ order.id }}
+                </span>
+            </div>
+
+            <div class="d-flex justify-content-between mb-3">
+                <strong>Total:</strong>
+
+                <span>
+                    ৳ {{ order.total_price|floatformat:2 }}
+                </span>
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <strong>Status:</strong>
+
+                <span class="badge bg-warning text-dark">
+                    {{ order.status }}
+                </span>
+            </div>
+
+        </div>
+
+        <!-- Buttons -->
+        <div class="d-flex gap-2 justify-content-center">
+
+            <a
+                href="{% url 'product_list' %}"
+                class="btn btn-dark"
+            >
+                Continue Shopping
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+```
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout - ShopSphere{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <h2 class="fw-bold mb-4">🛒 Checkout</h2>
+
+    <div class="row">
+
+        <!-- Checkout Form -->
+        <div class="col-md-7">
+
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+
+                    <h4 class="mb-4">Delivery Information</h4>
+
+                    <form method="POST">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label class="form-label">Full Name</label>
+                            <input
+                                type="text"
+                                name="full_name"
+                                class="form-control"
+                                placeholder="Enter your full name"
+                                required
+                            >
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Phone Number</label>
+                            <input
+                                type="text"
+                                name="phone"
+                                class="form-control"
+                                placeholder="01XXXXXXXXX"
+                                required
+                            >
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Address</label>
+                            <textarea
+                                name="address"
+                                class="form-control"
+                                rows="3"
+                                placeholder="Enter your full address"
+                                required
+                            ></textarea>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">City</label>
+                            <input
+                                type="text"
+                                name="city"
+                                class="form-control"
+                                placeholder="Enter your city"
+                                required
+                            >
+                        </div>
+
+                        <button type="submit" class="btn btn-dark w-100">
+                            Place Order
+                        </button>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Order Summary -->
+        <div class="col-md-5">
+
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+
+                    <h4 class="mb-4">Order Summary</h4>
+
+                    {% for item in cart.items.all %}
+
+                    <div class="d-flex justify-content-between mb-3">
+
+                        <div>
+                            <strong>{{ item.product.name }}</strong>
+                            <br>
+                            <small class="text-muted">
+                                Quantity: {{ item.quantity }}
+                            </small>
+                        </div>
+
+                        <span>
+                            ৳{{ item.product.price|floatformat:2 }}
+                        </span>
+
+                    </div>
+
+                    {% endfor %}
+
+                    <hr>
+
+                    <div class="d-flex justify-content-between">
+                        <strong>Total</strong>
+
+                        <strong>
+                            ৳{{ total_price|floatformat:2 }}
+                        </strong>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
